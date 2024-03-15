@@ -65,8 +65,8 @@ class Apple(GameObject):
     def randomize_position(self):
         """Устанавливаем случайную позицию для яблока."""
         self.position = (
-            randint(0, GRID_WIDTH) * GRID_SIZE - GRID_SIZE,
-            randint(0, GRID_HEIGHT) * GRID_SIZE - GRID_SIZE
+            randint(0, GRID_WIDTH - 1) * GRID_SIZE - GRID_SIZE,
+            randint(0, GRID_HEIGHT - 1) * GRID_SIZE - GRID_SIZE
         )
         return self.position
 
@@ -202,4 +202,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
