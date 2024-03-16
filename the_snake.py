@@ -65,8 +65,8 @@ class Apple(GameObject):
     def randomize_position(self):
         """Устанавливаем случайную позицию для яблока."""
         self.position = (
-            randint(0, GRID_WIDTH - 1) * GRID_SIZE - GRID_SIZE,
-            randint(0, GRID_HEIGHT - 1) * GRID_SIZE - GRID_SIZE
+            randint(0, GRID_WIDTH - 2) * GRID_SIZE,
+            randint(0, GRID_HEIGHT - 2) * GRID_SIZE
         )
         return self.position
 
@@ -137,7 +137,7 @@ class Snake(GameObject):
         if len(self.positions) > self.length:
             self.last = self.positions.pop()
 
-    def get_head_position(self) -> tuple:
+    def get_head_position(self):
         """Узнаем где голова."""
         return self.positions[0]
 
