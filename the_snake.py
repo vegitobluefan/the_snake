@@ -45,7 +45,7 @@ clock = pygame.time.Clock()
 BOARD_CENTER = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
 
-# Тут опишите все классы игры.
+# Тут все классы игры.
 class GameObject:
     """Основной класс."""
 
