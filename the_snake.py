@@ -71,6 +71,11 @@ class Apple(GameObject):
             randint(0, GRID_HEIGHT - 1) * GRID_SIZE
         )
 
+        snake = Snake()
+        if self.position in snake.positions:
+            self.randomize_position()
+            self.draw()
+
     def draw(self):
         """Метод для отрисовки яблока."""
         rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
@@ -83,16 +88,20 @@ class Snake(GameObject):
 
     def __init__(self):
         self.body_color = SNAKE_COLOR
-        self.length = 1
-        self.position = BOARD_CENTER
-        self.positions = [self.position]
+        self.snake_basic_elements()
         self.direction = RIGHT
         self.next_direction = None
         self.last = None
 
+    def snake_basic_elements(self):
+        """Основные элементы змейки, которые понядобятся в будущем."""
+        self.length = 1
+        self.position = BOARD_CENTER
+        self.positions = [self.position]
+
     def draw(self):
         """Отрисовка змейки."""
-        for position in self.positions:
+        for position in self.positions[:1]:
             rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
             pygame.draw.rect(screen, self.body_color, rect)
             pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
@@ -109,11 +118,11 @@ class Snake(GameObject):
 
     def move(self):
         """Движение змейки."""
-        head_position1, head_position2 = self.get_head_position()
+        head_x, head_y = self.get_head_position()
         dx, dy = self.direction
         new_position = (
-            ((head_position1 + GRID_SIZE * dx) % SCREEN_WIDTH),
-            ((head_position2 + GRID_SIZE * dy) % SCREEN_HEIGHT)
+            ((head_x + GRID_SIZE * dx) % SCREEN_WIDTH),
+            ((head_y + GRID_SIZE * dy) % SCREEN_HEIGHT)
         )
 
         if new_position in self.positions[2:]:
@@ -130,9 +139,7 @@ class Snake(GameObject):
 
     def reset(self):
         """Обнуляем змейку."""
-        self.length = 1
-        screen.fill(BOARD_BACKGROUND_COLOR)
-        self.positions = [BOARD_CENTER]
+        self.snake_basic_elements()
         self.direction = choice([UP, DOWN, LEFT, RIGHT])
 
 
@@ -157,11 +164,7 @@ def main():
     """Описывем основную логику игры."""
     apple = Apple()
     snake = Snake()
-
-    spawning_apple = apple.randomize_position()
-
-    if spawning_apple in snake.positions:
-        spawning_apple = apple.randomize_position()
+    apple.draw()
 
     while True:
         clock.tick(SPEED)
@@ -169,11 +172,11 @@ def main():
         if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.randomize_position()
+            apple.draw()
 
         pygame.display.update()
         handle_keys(snake)
         snake.draw()
-        apple.draw()
         snake.move()
         snake.update_direction()
 
