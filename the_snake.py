@@ -64,17 +64,18 @@ class Apple(GameObject):
         super().__init__(body_color)
         self.randomize_position()
 
-    def randomize_position(self):
+    def randomize_position(self, snake_taken_cells=None):
         """Устанавливаем случайную позицию для яблока."""
         self.position = (
             randint(0, GRID_WIDTH - 1) * GRID_SIZE,
             randint(0, GRID_HEIGHT - 1) * GRID_SIZE
         )
 
-        snake = Snake()
-        if self.position in snake.positions:
+        if snake_taken_cells is None:
+            snake_taken_cells = []
+
+        if self.position in snake_taken_cells:
             self.randomize_position()
-            self.draw()
 
     def draw(self):
         """Метод для отрисовки яблока."""
@@ -86,22 +87,23 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Описываем змейку."""
 
-    def __init__(self):
-        self.body_color = SNAKE_COLOR
+    def __init__(self, body_color=SNAKE_COLOR):
+        self.body_color = body_color
         self.snake_basic_elements()
-        self.direction = RIGHT
-        self.next_direction = None
-        self.last = None
 
     def snake_basic_elements(self):
         """Основные элементы змейки, которые понядобятся в будущем."""
         self.length = 1
         self.position = BOARD_CENTER
         self.positions = [self.position]
+        self.direction = RIGHT
+        self.next_direction = None
+        self.last = None
+        self.direction = choice([UP, DOWN, LEFT, RIGHT])
 
     def draw(self):
         """Отрисовка змейки."""
-        for position in self.positions[:1]:
+        for position in self.positions[0:1]:
             rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
             pygame.draw.rect(screen, self.body_color, rect)
             pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
@@ -140,7 +142,6 @@ class Snake(GameObject):
     def reset(self):
         """Обнуляем змейку."""
         self.snake_basic_elements()
-        self.direction = choice([UP, DOWN, LEFT, RIGHT])
 
 
 def handle_keys(game_object):
@@ -164,6 +165,7 @@ def main():
     """Описывем основную логику игры."""
     apple = Apple()
     snake = Snake()
+    snake_taken_cells = snake.positions[:]
     apple.draw()
 
     while True:
@@ -171,6 +173,7 @@ def main():
 
         if snake.get_head_position() == apple.position:
             snake.length += 1
+            snake_taken_cells.append(apple.position)
             apple.randomize_position()
             apple.draw()
 
