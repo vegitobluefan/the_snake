@@ -72,10 +72,8 @@ class Apple(GameObject):
                 randint(0, GRID_HEIGHT - 1) * GRID_SIZE
             )
 
-            if occupied_cells is BOARD_CENTER:
-                occupied_cells = []
-                if self.position in occupied_cells:
-                    self.randomize_position()
+            if self.position in occupied_cells:
+                self.randomize_position()
             break
 
     def draw(self):
