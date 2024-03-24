@@ -93,7 +93,6 @@ class Snake(GameObject):
     def snake_basic_elements(self):
         """Основные элементы змейки, которые понядобятся в будущем."""
         self.length = 1
-        self.position = BOARD_CENTER
         self.positions = [self.position]
         self.next_direction = None
         self.last = None
